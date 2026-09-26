@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.compiler }} ${{ matrix.build_type }}${{ matrix.sanitize == 'ON' && ' + sanitizers' || '' }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { compiler: gcc,   cxx: g++,     build_type: Release, sanitize: OFF }
+          - { compiler: clang, cxx: clang++, build_type: Release, sanitize: OFF }
+          - { compiler: gcc,   cxx: g++,     build_type: Debug,   sanitize: ON }
+          - { compiler: clang, cxx: clang++, build_type: Debug,   sanitize: ON }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_CXX_COMPILER=${{ matrix.cxx }}
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+          -DMML_SANITIZE=${{ matrix.sanitize }}
+      - name: Build
+        run: cmake --build build -j
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+      - name: Smoke-run executables
+        if: matrix.sanitize == 'OFF'
+        run: |
+          ./build/mml_demo > /dev/null
+          ./build/mml_bench --quick --ops 50000 --out /tmp/results
+          ./build/mml_execution --seeds 5 --out /tmp/results
+          ./build/mml_market_making --seeds 2 --steps 1000 --out /tmp/results
