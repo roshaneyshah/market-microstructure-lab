@@ -1,0 +1,25 @@
+Calibrating impact model from the simulator...
+  samples=800  sigma=0.4850 ticks/sqrt(step)  epsilon=0.8751  eta=0.02591 (R^2=0.235)  gamma=0.00980
+  avg volume/step=6.56  square-root law Y=1.704
+
+Running 500 seeds x 7 algorithms (buy 600 over 500 steps)...
+
+algorithm      IS(bps)      std      p95   CVaR95 |  IS(tick)      std |    vsVWAP    fill   impact     perm
+----------------------------------------------------------------------------------------------------------------
+TWAP             3.918    7.362   16.206   20.156 |     3.918    7.361 |     1.309   1.000    5.548    5.594
+VWAP             3.533    6.011   12.932   15.512 |     3.532    6.010 |     0.939   1.000    5.470    5.490
+POV(20%)         4.039    5.490   12.394   15.096 |     4.038    5.490 |     1.058   0.996    5.341    5.565
+AC(kT=0.5)       3.937    6.979   14.097   18.970 |     3.936    6.977 |     1.310   1.000    5.287    5.305
+AC(kT=2.0)       3.472    5.667   12.505   16.039 |     3.471    5.667 |     0.815   1.000    4.478    4.370
+AC(kT=5.0)       3.839    3.795    9.757   12.397 |     3.839    3.794 |    -0.130   1.000    5.261    5.226
+AC(kT=10.0)      4.048    2.760    8.088    9.861 |     4.048    2.760 |    -0.365   1.000    5.073    5.184
+
+Almgren-Chriss frontier: model prediction vs simulated (ticks per unit of parent)
+schedule           lambda   E[model]  sd[model] |     E[sim]    sd[sim]
+TWAP            0.000e+00      3.841      6.251 |      3.918      7.361
+AC(kT=0.5)      8.932e-08      3.841      6.150 |      3.936      6.977
+AC(kT=2.0)      1.429e-06      3.845      5.090 |      3.471      5.667
+AC(kT=5.0)      8.932e-06      3.878      3.411 |      3.839      3.794
+AC(kT=10.0)     3.573e-05      3.941      2.401 |      4.048      2.760
+
+CSV written to results/

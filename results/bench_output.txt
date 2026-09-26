@@ -1,0 +1,26 @@
+Order book benchmark: 1000000 messages, ~10000 resting orders
+clock overhead (p50 of back-to-back now()): 27 ns, included in latency figures
+
+mix: 52.1% add, 38.8% cancel, 9.1% aggressive
+
+variant          ns/msg   Mmsg/s allocs/msg  bytes/msg
+map+hash          116.4     8.59      0.659       23.6
+map+dense          80.2    12.47      0.138       27.6
+ladder+hash        55.3    18.08      0.521       12.5
+ladder+dense       55.4    18.05      0.000       16.5
+
+Latency per message type (ns): p50 / p99 / p99.9
+variant                          add                 cancel             aggressive
+map+hash         137 /   290 /    484    118 /   360 /    500    177 /   594 /    870
+map+dense        109 /   225 /    399     62 /   284 /    430    130 /   417 /    620
+ladder+hash       72 /   170 /    330    117 /   243 /    384    138 /   421 /    621
+ladder+dense      74 /   148 /    328     90 /   229 /    429    126 /   299 /    424
+
+Scaling with resting orders (ns/msg, throughput pass)
+   resting     map+hash    map+dense  ladder+hash ladder+dense
+      1000         72.2         48.7         43.6         27.7
+     10000        108.0         72.5         52.1         34.5
+    100000        183.8        114.0        100.7         52.1
+   1000000        299.1        154.3        219.5         76.9
+
+CSV written to results/

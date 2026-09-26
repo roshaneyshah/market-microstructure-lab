@@ -1,0 +1,31 @@
+Market making: 20 seeds x 5000 steps, maker fee -0.10, taker fee 0.30 (ticks/unit)
+
+PnL attribution (ticks, mean per run)
+strategy             total        sd    spread   invent.      fees |   fills   volume  max|q|  avg|q|     win%
+------------------------------------------------------------------------------------------------------------------
+Symmetric(join)     1171.5    4950.0    5151.2   -4758.0    -778.3 |    2458     7783   190.8    78.5      75%
+Symmetric(wide)     1504.8    1831.4    2168.5    -806.7    -143.0 |     458     1430    99.0    45.1      80%
+InventorySkew       2430.1     373.5    4495.9   -2633.1    -567.2 |    1743     5672    22.8     3.5     100%
+AS                  1258.6     138.5    1828.5    -727.9    -158.0 |     469     1580     8.9     1.3     100%
+AS+imbalance         944.0      99.9    1553.5    -753.2    -143.7 |     423     1437     7.7     1.3     100%
+(fees column is fees paid; negative means net rebates earned)
+
+Markouts per unit (ticks): spread capture + adverse move = markout
+strategy          capt.   adv@0     adv@1     adv@5     adv@20    adv@50    mkt@0     mkt@1     mkt@5     mkt@20    mkt@50 
+Symmetric(join)   0.662    -0.300    -0.335    -0.413    -0.523    -0.557     0.362     0.327     0.249     0.139     0.105
+                 adverse@20 by regime: calm -0.367 (129357 units)  volatile -1.311 (25700 units)
+Symmetric(wide)   1.517    -0.408    -0.432    -0.514    -0.571    -0.545     1.109     1.084     1.003     0.946     0.972
+                 adverse@20 by regime: calm -0.244 (18141 units)  volatile -1.146 (10309 units)
+InventorySkew     0.793    -0.302    -0.374    -0.439    -0.479    -0.474     0.491     0.418     0.353     0.314     0.318
+                 adverse@20 by regime: calm -0.345 (92007 units)  volatile -1.064 (20964 units)
+AS                1.157    -0.359    -0.473    -0.465    -0.478    -0.471     0.798     0.684     0.692     0.680     0.687
+                 adverse@20 by regime: calm -0.347 (26180 units)  volatile -1.126 (5291 units)
+AS+imbalance      1.081    -0.335    -0.462    -0.457    -0.512    -0.517     0.746     0.619     0.624     0.570     0.564
+                 adverse@20 by regime: calm -0.370 (23263 units)  volatile -1.130 (5335 units)
+
+Queue-imbalance signal: corr(I_t, mid_{t+h} - mid_t) on background-only markets
+  h=1   corr=0.189  slope=0.151 ticks  R^2=0.036  n=49990
+  h=5   corr=0.080  slope=0.134 ticks  R^2=0.006  n=49950
+  h=20  corr=-0.040  slope=-0.156 ticks  R^2=0.002  n=49800
+
+CSV written to results/
